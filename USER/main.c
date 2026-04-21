@@ -5,9 +5,10 @@
 #include "oled.h"
 #include "usart.h"
 #include "RP.h"
+#include "Moter.h"
 
 uint8_t KeyNum;
-uint16_t target = 0;
+uint16_t speed = 0;
 
 int main(void)
 {
@@ -18,6 +19,7 @@ int main(void)
     OLED_Init();
     USART1_Init();
     RP_Init();
+    Moter_Init();
 
     
     while (1)
@@ -25,21 +27,22 @@ int main(void)
         KeyNum = Key_GetNum();
 		if (KeyNum == 1)
 		{
-			target += 10;
+			speed += 10;
 		}
 		if (KeyNum == 2)
 		{
-			target -= 10;
+			speed -= 10;
 		}
 		if (KeyNum == 3)
 		{
-			target = 0;
+			speed = 0;
 		}
+        Moter_SetSpeed(speed);
         OLED_Clear();
-        OLED_Printf(0, 0, OLED_8X16, "%d", RP_GetValue(1));
-        OLED_Printf(0, 16, OLED_8X16, "%d", RP_GetValue(2));
-        OLED_Printf(0, 32, OLED_8X16, "%d", RP_GetValue(3));
-        OLED_Printf(0, 48, OLED_8X16, "%d", RP_GetValue(4));
+        // OLED_Printf(0, 0, OLED_8X16, "%d", RP_GetValue(1));
+        // OLED_Printf(0, 16, OLED_8X16, "%d", RP_GetValue(2));
+        // OLED_Printf(0, 32, OLED_8X16, "%d", RP_GetValue(3));
+        // OLED_Printf(0, 48, OLED_8X16, "%d", RP_GetValue(4));
         OLED_Update();
 	}	
 }
