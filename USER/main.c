@@ -4,6 +4,7 @@
 #include "Key.h"
 #include "oled.h"
 #include "usart.h"
+#include "RP.h"
 
 uint8_t KeyNum;
 uint16_t target = 0;
@@ -16,9 +17,8 @@ int main(void)
     Key_Init();
     OLED_Init();
     USART1_Init();
+    RP_Init();
 
-    U1_printf("USART1 initialized\r\n");
-    
     
     while (1)
     {
@@ -36,7 +36,10 @@ int main(void)
 			target = 0;
 		}
         OLED_Clear();
-        OLED_Printf(0, 0, OLED_6X8, "Key: %d", target);
+        OLED_Printf(0, 0, OLED_8X16, "%d", RP_GetValue(1));
+        OLED_Printf(0, 16, OLED_8X16, "%d", RP_GetValue(2));
+        OLED_Printf(0, 32, OLED_8X16, "%d", RP_GetValue(3));
+        OLED_Printf(0, 48, OLED_8X16, "%d", RP_GetValue(4));
         OLED_Update();
 	}	
 }
