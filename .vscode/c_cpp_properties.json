@@ -7,11 +7,13 @@
                 "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\CMSIS\\Include",
                 "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\HW\\Include",
                 "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\LIB\\Include",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\SYSTEM\\Include",
                 "D:\\Keil5\\ARM\\ARMCC\\include",
                 "D:\\Keil5\\ARM\\ARMCC\\include\\rw",
                 "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\CMSIS\\Source",
                 "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\HW\\Source",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\LIB\\Source"
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\LIB\\Source",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\3底层驱动实现\\SYSTEM\\Source"
             ],
             "defines": [
                 "STM32F10X_MD",

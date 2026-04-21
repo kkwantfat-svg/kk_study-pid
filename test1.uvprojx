@@ -322,7 +322,7 @@
             <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -332,7 +332,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\USER;.\CMSIS\Include;.\HW\Include;.\LIB\Include</IncludePath>
+              <IncludePath>.\USER;.\CMSIS\Include;.\HW\Include;.\LIB\Include;.\SYSTEM\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -454,6 +454,16 @@
               <FileName>stm32f10x_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\LIB\Source\stm32f10x_usart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>SYSTEM</GroupName>
+          <Files>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SYSTEM\Source\timer.c</FilePath>
             </File>
           </Files>
         </Group>
