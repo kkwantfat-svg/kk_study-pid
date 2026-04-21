@@ -7,11 +7,24 @@
 #include "RP.h"
 #include "Moter.h"
 #include "encoder.h"
+#include "pid.h"    
 
 uint8_t KeyNum;
 uint16_t speed = 0;
-int16_t encoderCount = 0;
-int16_t location = 0;
+
+PID_Controller pidspeedcontroller = {
+    .Kp = 0.8f,
+    .Ki = 0.34f,
+    .Kd = 0.0f,
+    .target = 0.0f,
+    .output = 0.0f,
+    .actual = 0.0f,
+    .integral = 0.0f,
+    .prev_error = 0.0f,
+    .error = 0.0f,
+    .output_limit_max = 100.0f,
+    .output_limit_min = -100.0f
+};
 
 int main(void)
 {
@@ -24,30 +37,42 @@ int main(void)
     RP_Init();
     Moter_Init();
     Encoder_Init();
+
+    OLED_Printf(0, 0, OLED_8X16, "Speed Control");
+	OLED_Update();
     
     while (1)
     {
-        OLED_Clear();
-        KeyNum = Key_GetNum();
-		if (KeyNum == 1)
-		{
-			speed += 10;
-		}
-		if (KeyNum == 2)
-		{
-			speed -= 10;
-		}
-		if (KeyNum == 3)
-		{
-			speed = 0;
-            location = 0;
-		}
-        Moter_SetSpeed(speed);
-        OLED_Printf(0, 0, OLED_8X16, "encoder: %+d", encoderCount);
-        OLED_Printf(0, 16, OLED_8X16, "location: %+d", location);
-        OLED_Printf(0, 32, OLED_8X16, "speed: %+d", speed);
-        // OLED_Printf(0, 48, OLED_8X16, "%d", RP_GetValue(4));
+        //OLED_Clear();
+        // KeyNum = Key_GetNum();
+		// if (KeyNum == 1)
+		// {
+		// 	speed += 10;
+		// }
+		// if (KeyNum == 2)
+		// {
+		// 	speed -= 10;
+		// }
+		// if (KeyNum == 3)
+		// {
+		// 	speed = 0;
+		// }
+
+        pidspeedcontroller.target = (float)RP_GetValue(4) / 4095.0f * 200.0f - 100.0f; // 将RP传感器的ADC值转换为目标速度，范围为-100到100
+        // pidspeedcontroller.Kp = RP_GetValue(1) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Kp，范围为0到2
+        // pidspeedcontroller.Ki = RP_GetValue(2) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Ki，范围为0到2
+        // pidspeedcontroller.Kd = RP_GetValue(3) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Kd，范围为0到2
+
+		OLED_Printf(0, 16, OLED_8X16, "Kp:%4.2f", pidspeedcontroller.Kp);
+		OLED_Printf(0, 32, OLED_8X16, "Ki:%4.2f", pidspeedcontroller.Ki);
+		OLED_Printf(0, 48, OLED_8X16, "Kd:%4.2f", pidspeedcontroller.Kd);
+		
+		OLED_Printf(64, 16, OLED_8X16, "Tar:%+04.0f", pidspeedcontroller.target);
+		OLED_Printf(64, 32, OLED_8X16, "Act:%+04.0f", pidspeedcontroller.actual);
+		OLED_Printf(64, 48, OLED_8X16, "Out:%+04.0f", pidspeedcontroller.output);
+
         OLED_Update();
+        U1_printf("%f,%f,%f\r\n", pidspeedcontroller.target, pidspeedcontroller.actual, pidspeedcontroller.output);
 	}	
 }
 
@@ -62,11 +87,12 @@ void TIM1_UP_IRQHandler(void)
         // User code to handle timer update event
         Key_Tick();
         counter++;
-        if (counter >= 100) // 每100个更新周期读取一次编码器值
+        if (counter >= 40) // 每40个更新周期执行一次pid调控
         {
             counter = 0;
-            encoderCount = Encoder_GetCount();
-            location += encoderCount; // 累加位置
+            pidspeedcontroller.actual = (float)Encoder_GetCount();;
+            PID_Update(&pidspeedcontroller);
+            Moter_SetSpeed((int8_t)pidspeedcontroller.output);
         }
     }
 }
