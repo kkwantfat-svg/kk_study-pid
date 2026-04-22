@@ -32,9 +32,9 @@ PID_Controller pidspeedcontroller = {
 };
 
 PID_Controller pidlocationcontroller = {
-    .Kp = 0.0f,
+    .Kp = 0.41f,
     .Ki = 0.0f,
-    .Kd = 0.0f,
+    .Kd = 0.22f,
     .target = 0.0f,
     .output = 0.0f,
     .actual = 0.0f,
