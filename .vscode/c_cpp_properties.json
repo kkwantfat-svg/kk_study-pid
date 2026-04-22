@@ -3,17 +3,17 @@
         {
             "name": "Target 1",
             "includePath": [
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\USER",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\CMSIS\\Include",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\HW\\Include",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\LIB\\Include",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\SYSTEM\\Include",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\USER",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\CMSIS\\Include",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\HW\\Include",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\LIB\\Include",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\SYSTEM\\Include",
                 "D:\\Keil5\\ARM\\ARMCC\\include",
                 "D:\\Keil5\\ARM\\ARMCC\\include\\rw",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\CMSIS\\Source",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\HW\\Source",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\LIB\\Source",
-                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\4PID调速优化\\SYSTEM\\Source"
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\CMSIS\\Source",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\HW\\Source",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\LIB\\Source",
+                "c:\\Users\\i2stay\\Desktop\\GD32_study\\PID_study\\PID-study\\SYSTEM\\Source"
             ],
             "defines": [
                 "STM32F10X_MD",
