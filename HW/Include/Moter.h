@@ -3,6 +3,6 @@
 #include <stdint.h>
 
 void Moter_Init(void);
-void Moter_SetSpeed(int8_t speed);
+void Moter_SetSpeed_Location(int8_t speed);
 
 #endif

@@ -18,12 +18,12 @@ void Moter_Init(void)
     PWM_Init(); // 初始化PWM
 }
 
-/**
- * 函数名: Moter_SetSpeed
- * 描述: 设置电机速度函数
+/*
+ * 函数名: Moter_SetSpeed_Location
+ * 描述: 设置电机速度与位置函数
  * 参数: speed - 电机速度，范围为-100到100，正数表示正转，负数表示反转，0表示停止
  */
-void Moter_SetSpeed(int8_t speed)
+void Moter_SetSpeed_Location(int8_t speed)
 {
     if(speed >= 0)  // 正转
     {
