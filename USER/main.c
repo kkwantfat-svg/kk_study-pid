@@ -14,27 +14,27 @@ uint16_t speed = 0;
 
 #define    STOP_SPEED   1.0f
 
-// PID_Controller pidspeedcontroller = {
-//     .Kp = 0.8f,
-//     .Ki = 0.34f,
-//     .Kd = 0.0f,
-//     .target = 0.0f,
-//     .output = 0.0f,
-//     .actual = 0.0f,
-//     .integral = 0.0f,
-//     .prev_error = 0.0f,
-//     .error = 0.0f,
-//     .output_limit_max = 100.0f,
-//     .output_limit_min = -100.0f,
-//     .integral_limit_max = 200.0f,
-//     .integral_limit_min = -200.0f
+PID_Controller pidspeedcontroller = {
+    .Kp = 0.5f,
+    .Ki = 0.45f,
+    .Kd = 0.0f,
+    .target = 0.0f,
+    .output = 0.0f,
+    .actual = 0.0f,
+    .integral = 0.0f,
+    .prev_error = 0.0f,
+    .error = 0.0f,
+    .output_limit_max = 100.0f,
+    .output_limit_min = -100.0f,
+    .integral_limit_max = 200.0f,
+    .integral_limit_min = -200.0f
 
-// };
+};
 
 PID_Controller pidlocationcontroller = {
-    .Kp = 0.6f,
-    .Ki = 0.2f,
-    .Kd = 0.2f,
+    .Kp = 0.0f,
+    .Ki = 0.0f,
+    .Kd = 0.0f,
     .target = 0.0f,
     .output = 0.0f,
     .actual = 0.0f,
@@ -80,7 +80,7 @@ int main(void)
 		// 	speed = 0;
 		// }
 
-        //pidspeedcontroller.target = (float)RP_GetValue(4) / 4095.0f * 200.0f - 100.0f; // 将RP传感器的ADC值转换为目标速度，范围为-100到100
+        // pidspeedcontroller.target = (float)RP_GetValue(4) / 4095.0f * 200.0f - 100.0f; // 将RP传感器的ADC值转换为目标速度，范围为-100到100
         // pidspeedcontroller.Kp = RP_GetValue(1) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Kp，范围为0到2
         // pidspeedcontroller.Ki = RP_GetValue(2) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Ki，范围为0到2
         // pidspeedcontroller.Kd = RP_GetValue(3) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Kd，范围为0到2
@@ -90,13 +90,21 @@ int main(void)
         pidlocationcontroller.Ki = RP_GetValue(2) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Ki，范围为0到2
         pidlocationcontroller.Kd = RP_GetValue(3) / 4095.0f * 2.0f; // 将RP传感器的ADC值转换为Kd，范围为0到2
 
-		OLED_Printf(0, 16, OLED_8X16, "Kp:%4.2f", pidlocationcontroller.Kp);
-		OLED_Printf(0, 32, OLED_8X16, "Ki:%4.2f", pidlocationcontroller.Ki);
-		OLED_Printf(0, 48, OLED_8X16, "Kd:%4.2f", pidlocationcontroller.Kd);
+        // OLED_Printf(0, 16, OLED_8X16, "Kp:%4.2f", pidspeedcontroller.Kp);
+		// OLED_Printf(0, 32, OLED_8X16, "Ki:%4.2f", pidspeedcontroller.Ki);
+		// OLED_Printf(0, 48, OLED_8X16, "Kd:%4.2f", pidspeedcontroller.Kd);
 		
-		OLED_Printf(64, 16, OLED_8X16, "Tar:%+04.0f", pidlocationcontroller.target);
-		OLED_Printf(64, 32, OLED_8X16, "Act:%+04.0f", pidlocationcontroller.actual);
-		OLED_Printf(64, 48, OLED_8X16, "Out:%+04.0f", pidlocationcontroller.output);
+		// OLED_Printf(64, 16, OLED_8X16, "Tar:%+04.0f", pidspeedcontroller.target);
+		// OLED_Printf(64, 32, OLED_8X16, "Act:%+04.0f", pidspeedcontroller.actual);
+		// OLED_Printf(64, 48, OLED_8X16, "Out:%+04.0f", pidspeedcontroller.output);
+
+        OLED_Printf(0, 16, OLED_8X16, "Kp:%4.2f", pidlocationcontroller.Kp);
+        OLED_Printf(0, 32, OLED_8X16, "Ki:%4.2f", pidlocationcontroller.Ki);
+        OLED_Printf(0, 48, OLED_8X16, "Kd:%4.2f", pidlocationcontroller.Kd);
+        
+        OLED_Printf(64, 16, OLED_8X16, "Tar:%+04.0f", pidlocationcontroller.target);
+        OLED_Printf(64, 32, OLED_8X16, "Act:%+04.0f", pidlocationcontroller.actual);
+        OLED_Printf(64, 48, OLED_8X16, "Out:%+04.0f", pidlocationcontroller.output);
 
         OLED_Update();
         U1_printf("%f,%f,%f\r\n", pidlocationcontroller.target, pidlocationcontroller.actual, pidlocationcontroller.output);
@@ -105,7 +113,7 @@ int main(void)
 
 void TIM1_UP_IRQHandler(void)
 {
-    static uint16_t counter = 0;
+    static uint16_t counter = 0, counter_location = 0;
     if (TIM_GetITStatus(TIM1, TIM_IT_Update) != RESET)
     {
         // Clear the update interrupt flag
@@ -114,12 +122,22 @@ void TIM1_UP_IRQHandler(void)
         // User code to handle timer update event
         Key_Tick();
         counter++;
+        counter_location++;
         if (counter >= 40) // 每40个更新周期执行一次pid调控
         {
             counter = 0;
-            pidlocationcontroller.actual += (float)Encoder_GetCount();;
-            PID_Update_Location(&pidlocationcontroller);
-            Moter_SetSpeed_Location((int8_t)pidlocationcontroller.output);
+            pidspeedcontroller.actual = (float)Encoder_GetCount();  // 获取编码器计数作为实际速度
+            PID_Update(&pidspeedcontroller);
+            Moter_SetSpeed_Location((int8_t)pidspeedcontroller.output);
         }
+        
+        if(counter_location >= 40) // 每40个更新周期执行一次位置pid调控
+        {
+            counter_location = 0;
+            pidlocationcontroller.actual += pidspeedcontroller.actual;  // 将速度积分得到位置，作为位置PID的实际值
+            PID_Update_Location(&pidlocationcontroller);
+            pidspeedcontroller.target = pidlocationcontroller.output; // 将位置PID的输出作为速度PID的目标值，实现位置控制           
+        }
+
     }
 }
