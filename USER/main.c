@@ -12,6 +12,8 @@
 uint8_t KeyNum;
 uint16_t speed = 0;
 
+#define    STOP_SPEED   1.0f
+
 PID_Controller pidspeedcontroller = {
     .Kp = 0.8f,
     .Ki = 0.34f,
@@ -23,7 +25,10 @@ PID_Controller pidspeedcontroller = {
     .prev_error = 0.0f,
     .error = 0.0f,
     .output_limit_max = 100.0f,
-    .output_limit_min = -100.0f
+    .output_limit_min = -100.0f,
+    .integral_limit_max = 200.0f,
+    .integral_limit_min = -200.0f
+
 };
 
 int main(void)
@@ -72,7 +77,7 @@ int main(void)
 		OLED_Printf(64, 48, OLED_8X16, "Out:%+04.0f", pidspeedcontroller.output);
 
         OLED_Update();
-        U1_printf("%f,%f,%f\r\n", pidspeedcontroller.target, pidspeedcontroller.actual, pidspeedcontroller.output);
+        U1_printf("%f,%f,%f,%f\r\n", pidspeedcontroller.target, pidspeedcontroller.actual, pidspeedcontroller.output, pidspeedcontroller.integral);
 	}	
 }
 
@@ -92,7 +97,15 @@ void TIM1_UP_IRQHandler(void)
             counter = 0;
             pidspeedcontroller.actual = (float)Encoder_GetCount();;
             PID_Update(&pidspeedcontroller);
-            Moter_SetSpeed((int8_t)pidspeedcontroller.output);
+            if(pidspeedcontroller.target <= STOP_SPEED  && pidspeedcontroller.target >= -STOP_SPEED)
+            {
+                pidspeedcontroller.output = 0;
+				Moter_SetSpeed(pidspeedcontroller.output);
+            }
+            else
+            {
+                Moter_SetSpeed((int8_t)pidspeedcontroller.output);
+            }
         }
     }
 }

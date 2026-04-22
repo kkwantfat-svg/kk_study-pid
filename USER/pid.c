@@ -13,6 +13,11 @@ void PID_Update(PID_Controller *pid)
     if (pid->Ki != 0.0f) // 只有当积分系数不为0时才计算积分
     {
         pid->integral += pid->error;
+
+        // 积分限制（根据实际需求调整）
+        pid->integral = (pid->integral > pid->integral_limit_max) ? pid->integral_limit_max : pid->integral;
+        pid->integral = (pid->integral < pid->integral_limit_min) ? pid->integral_limit_min : pid->integral;
+
     }
     else
     {

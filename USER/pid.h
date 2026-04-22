@@ -18,6 +18,9 @@ typedef struct {
     float output_limit_max; // 输出上限
     float output_limit_min; // 输出下限
 
+    float integral_limit_max; // 积分上限
+    float integral_limit_min; // 积分下限
+
 } PID_Controller;
 
 void PID_Update(PID_Controller *pid);
