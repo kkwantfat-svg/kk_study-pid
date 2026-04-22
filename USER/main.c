@@ -32,9 +32,9 @@ uint16_t speed = 0;
 // };
 
 PID_Controller pidlocationcontroller = {
-    .Kp = 0.42f,
-    .Ki = 0.0f,
-    .Kd = 0.13f,
+    .Kp = 0.6f,
+    .Ki = 0.2f,
+    .Kd = 0.2f,
     .target = 0.0f,
     .output = 0.0f,
     .actual = 0.0f,
@@ -118,7 +118,7 @@ void TIM1_UP_IRQHandler(void)
         {
             counter = 0;
             pidlocationcontroller.actual += (float)Encoder_GetCount();;
-            PID_Update(&pidlocationcontroller);
+            PID_Update_Location(&pidlocationcontroller);
             Moter_SetSpeed_Location((int8_t)pidlocationcontroller.output);
         }
     }

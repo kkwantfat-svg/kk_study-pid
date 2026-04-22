@@ -1,6 +1,7 @@
 #ifndef __PID_H
 #define __PID_H
 #include <stdint.h>
+#include <cmath>
 
 typedef struct {
     float Kp;           // 比例系数
@@ -24,5 +25,6 @@ typedef struct {
 } PID_Controller;
 
 void PID_Update(PID_Controller *pid);
+void PID_Update_Location(PID_Controller *pid);
 
 #endif
